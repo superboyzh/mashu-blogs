@@ -106,12 +106,11 @@ export default defineConfig({
           { text: "标签页", link: "/tags" },
         ],
       },
-      { text: "✨ 赞赏", link: "/personal/" },
     ],
     socialLinks: [
       {
         icon: "github",
-        link: "https://github.com/Kele-Bingtang/vitepress-theme-teek",
+        link: "https://github.com/superboyzh",
       },
     ],
     search: {
