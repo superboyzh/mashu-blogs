@@ -58,7 +58,7 @@ export default defineConfig({
     },
   },
   sitemap: {
-    hostname: "https://vp.teek.top", // ** 换成你的域名
+    hostname: "https://idoit.icu", // ** 换成你的域名
     transformItems: (items) => {
       const permalinkItemBak: typeof items = [];
       // 使用永久链接生成 sitemap
@@ -102,10 +102,6 @@ export default defineConfig({
           { text: "归档页", link: "/archives" },
           { text: "清单页", link: "/articleOverview" },
           { text: "登录页", link: "/login" },
-          {
-            text: "风险链接提示页",
-            link: "/risk-link?target=https://vp.teek.top",
-          },
           { text: "分类页", link: "/categories" },
           { text: "标签页", link: "/tags" },
         ],
@@ -119,7 +115,12 @@ export default defineConfig({
       },
     ],
     search: {
-      provider: "local",
+      provider: "algolia",
+      options: {
+        appId: "87O7U6WJIM",
+        apiKey: "454304874307bb9ef7ee67c61d330920",
+        indexName: "zh_Blog",
+      },
     },
     editLink: {
       text: "在 GitHub 上编辑此页",
