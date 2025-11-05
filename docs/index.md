@@ -2,8 +2,8 @@
 layout: home
 
 hero:
-  name: Teek
-  text: VitePress 主题
+  name: hao
+  text: hao Blog
   tagline: ✨一个轻量、简洁高效、灵活配置，易于扩展的 VitePress 主题
   actions:
     - theme: brand
