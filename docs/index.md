@@ -4,7 +4,7 @@ layout: home
 hero:
   name: hao
   text: hao Blog
-  tagline: ✨一个轻量、简洁高效、灵活配置，易于扩展的 VitePress 主题
+  tagline: ✨一个轻量、简洁高效、灵活配置，易于扩展的 VitePress 主题15444484556
   actions:
     - theme: brand
       text: 开始
