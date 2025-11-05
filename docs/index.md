@@ -3,7 +3,7 @@ layout: home
 
 hero:
   name: hao
-  text: hao Blog
+  text: hao Bloghh
   tagline: ✨一个轻量、简洁高效、灵活配置，易于扩展的 VitePress 主题15444484556
   actions:
     - theme: brand
