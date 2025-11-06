@@ -1,5 +1,6 @@
 import Teek from "vitepress-theme-teek";
 import TeekLayoutProvider from "./components/TeekLayoutProvider.vue";
+import MyNoticeContent from "./components/MyNoticeContent.vue";
 
 // Teek 在线主题包引用（需安装 Teek 在线版本）
 import "vitepress-theme-teek/index.css";
@@ -19,7 +20,13 @@ import "vitepress-theme-teek/theme-chalk/tk-fade-up-animation.css"; // 首次加
 import "./styles/code-bg.scss";
 import "./styles/iframe.scss";
 
+import { h } from "vue";
+
 export default {
   extends: Teek,
-  Layout: TeekLayoutProvider,
+  Layout() {
+    return h(Teek.Layout, null, {
+      "teek-notice-content": () => h(MyNoticeContent),
+    });
+  },
 };

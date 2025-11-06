@@ -94,8 +94,6 @@ export default defineConfig({
         link: "/guide/intro",
         activeMatch: "/01.指南/",
       },
-      { text: "配置", link: "/reference/config", activeMatch: "/10.配置/" },
-      { text: "开发", link: "/develop/intro", activeMatch: "/15.主题开发/" },
       {
         text: "功能页",
         items: [

@@ -8,7 +8,7 @@ export const teekConfig = defineTeekConfig({
   author: { name: "MaShu", link: "https://github.com/superboyzh" },
   backTop: {
     enabled: true, // 是否启用返回顶部按钮
-    content: "progress", // 回到顶部按钮的显示内容，可选配置 progress | icon
+    content: "icon", // 回到顶部按钮的显示内容，可选配置 progress | icon
     done: (TkMessage) => TkMessage.success("返回顶部成功"), // 回到顶部后的回调
   },
   // 滚动到评论区配置
@@ -26,6 +26,54 @@ export const teekConfig = defineTeekConfig({
       createYear: 2025,
       suffix: "MaShu. All rights reserved.",
     },
+    // ICP 备案信息配置
+    icpRecord: {
+      name: "赣ICP备2021009994号",
+      link: "http://beian.miit.gov.cn/",
+    },
+  },
+  themeEnhance: {
+    enabled: true, // 启用主题增强功能
+    position: "top", // 位置，top 为导航栏右侧，bottom 为右下角
+    // 布局切换配置
+    layoutSwitch: {
+      disabled: false, // 禁用布局切换
+      defaultMode: "original", // 布局切换的默认模式
+      disableHelp: false, // 禁用帮助提示
+      disableAnimation: false, // 禁用布局切换动画
+      defaultDocMaxWidth: 90, // 内容布局最大宽度的默认百分比，仅限 0-100
+      disableDocMaxWidthHelp: false, // 禁用帮助提示
+      defaultPageMaxWidth: 95, // 页面布局最大宽度的默认百分比，仅限 0-100
+      disablePageMaxWidthHelp: false, // 禁用帮助提示
+    },
+    // 布局主题色配置
+    themeColor: {
+      disabled: false, // 禁用布局主题色切换
+      defaultColorName: "vp-default", // 布局默认主题色
+      defaultSpread: false, // 是否将主题色扩散到其他元素（根据主题色计算其他元素需要的颜色）
+      disableHelp: false, // 禁用帮助提示
+      disabledInMobile: false, // 是否在移动端禁用
+    },
+    // 聚光灯配置
+    spotlight: {
+      disabled: false, // 禁用聚光灯
+      defaultStyle: "aside", //  聚光灯默认样式
+      disableHelp: false, // 禁用帮助提示
+      defaultValue: true, // 聚光灯默认开关状态
+    },
+  },
+  // 公告配置
+  notice: {
+    enabled: true, // 是否启用公告功能
+    title: "公告", // 公告标题，支持函数式：需要和国际化搭配使用，根据不同语言环境返回不同标题
+    initOpen: true,
+    duration: 0, // 弹框定时自动关闭，0 不自动消失
+    mobileMinify: false, // 移动端自动最小化
+    reopen: true,
+    useStorage: true, // 是是否使用 localStorage 存储公告状态，如：当打开公告弹框后，下次进来则自动打开弹框
+    twinkle: false, // 公告图标是否打开闪烁提示
+    position: "top", // 公告弹框出现位置
+    // ...
   },
   articleAnalyze: {
     showIcon: true, // 作者、日期、分类、标签、字数、阅读时长、浏览量等文章信息的图标是否显示
@@ -66,7 +114,7 @@ export const teekConfig = defineTeekConfig({
   ],
   banner: {
     enabled: true, // 是否启用 Banner
-    name: "MaShu", // Banner 标题，默认读取 vitepress 的 title 属性
+    name: "MaShu Blog", // Banner 标题，默认读取 vitepress 的 title 属性
     bgStyle: "fullImg", // Banner 背景风格：pure 为纯色背景，partImg 为局部图片背景，fullImg 为全屏图片背景
     pureBgColor: "#28282d", // Banner 背景色，bgStyle 为 pure 时生效
     imgSrc: ["/blog/bg1.webp", "/blog/bg2.webp", "/blog/bg3.webp"], // Banner 图片链接。bgStyle 为 partImg 或 fullImg 时生效
@@ -95,7 +143,7 @@ export const teekConfig = defineTeekConfig({
   blogger: {
     name: "MaShu", // 博主昵称
     slogan: "朝圣的使徒，正在走向编程的至高殿堂！", // 博主签名
-    shape: "circle-rotate", // 头像风格：square 为方形头像，circle 为圆形头像，circle-rotate 可支持鼠标悬停旋转，circle-rotate-last 将会持续旋转 59s
+    shape: "circle-rotate-last", // 头像风格：square 为方形头像，circle 为圆形头像，circle-rotate 可支持鼠标悬停旋转，circle-rotate-last 将会持续旋转 59s
     avatar: "/logo/avatar.jpeg", // 博主头像
     circleBgImg: "/blog/bg4.webp", // 背景图片
     circleBgMask: true, // 遮罩层是否显示，仅当 shape 为 circle 且 circleBgImg 配置时有效
@@ -125,5 +173,21 @@ export const teekConfig = defineTeekConfig({
     sidebarOption: {
       initItems: false,
     },
+  },
+  // 文章配置
+  post: {
+    postStyle: "list", // 文章列表风格
+    excerptPosition: "top", // 文章摘要位置
+    showMore: true, // 是否显示更多按钮
+    moreLabel: "阅读全文 >", // 更多按钮文字
+    emptyLabel: "暂无文章", // 文章列表为空时的标签
+    coverImgMode: "default", // 文章封面图模式
+    showCapture: true, // 是否在摘要位置显示文章部分文字，当为 true 且不使用 frontmatter.describe 和 <!-- more --> 时，会自动截取前 300 个字符作为摘要
+    splitSeparator: true, // 文章信息（作者、创建时间、分类、标签等信息）是否添加 | 分隔符
+    transition: true, // 是否开启过渡动画
+    transitionName: "tk-slide-fade", // 自定义过渡动画名称
+    listStyleTitleTagPosition: "right", // 列表模式下的标题标签位置（postStyle 为 list）
+    cardStyleTitleTagPosition: "left", // 卡片模式下的标题标签位置（postStyle 为 card）
+    defaultCoverImg: [], // 默认封面图地址，如果不设置封面图则使用默认封面图地址
   },
 });
