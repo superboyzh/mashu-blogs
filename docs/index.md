@@ -2,8 +2,8 @@
 layout: home
 
 hero:
-  name: ZeHan
-  text: ZeHan Blog
+  name: MaShu
+  text: MaShu Blog
   tagline: ✨期待发展成一个神奇的技术文档
   actions:
     - theme: brand

@@ -11,7 +11,7 @@ const description = [
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   extends: teekConfig,
-  title: "ZeHan 的博客 | ZeHan Blog",
+  title: "MaShu Blog",
   description: description,
   cleanUrls: false,
   lastUpdated: true,
@@ -24,13 +24,13 @@ export default defineConfig({
     ["link", { rel: "icon", type: "image/png", href: "/teek-logo-mini.png" }],
     ["meta", { property: "og:type", content: "website" }],
     ["meta", { property: "og:locale", content: "zh-CN" }],
-    ["meta", { property: "og:title", content: "ZeHan 的博客 | ZeHan Blog" }],
-    ["meta", { property: "og:site_name", content: "ZeHan 的博客" }],
+    ["meta", { property: "og:title", content: "MaShu 的博客 | MaShu Blog" }],
+    ["meta", { property: "og:site_name", content: "MaShu 的博客" }],
     ["meta", { property: "og:image", content: "" }],
     ["meta", { property: "og:url", content: "" }],
     ["meta", { property: "og:description", description }],
     ["meta", { name: "description", description }],
-    ["meta", { name: "author", content: "ZeHan" }],
+    ["meta", { name: "author", content: "MaShu" }],
     // 禁止浏览器缩放
     // [
     //   "meta",

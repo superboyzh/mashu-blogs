@@ -5,7 +5,7 @@ export const teekConfig = defineTeekConfig({
   teekHome: true, // 是否开启博客首页
   vpHome: false, // 是否隐藏 VP 首页
   sidebarTrigger: true, // 是否开启侧边栏折叠功能
-  author: { name: "ZeHan", link: "https://github.com/superboyzh" },
+  author: { name: "MaShu", link: "https://github.com/superboyzh" },
   backTop: {
     enabled: true, // 是否启用返回顶部按钮
     content: "progress", // 回到顶部按钮的显示内容，可选配置 progress | icon
@@ -13,7 +13,7 @@ export const teekConfig = defineTeekConfig({
   },
   // 滚动到评论区配置
   toComment: {
-    enabled: true, // 是否启动滚动到评论区功能
+    enabled: false, // 是否启动滚动到评论区功能
     done: (TkMessage) => TkMessage.success("滚动到评论区成功"), // 滚动到评论区后的回调
   },
   footerInfo: {
@@ -24,7 +24,7 @@ export const teekConfig = defineTeekConfig({
     copyright: {
       show: true, // 是否显示博客版权
       createYear: 2025,
-      suffix: "ZeHan. All rights reserved.",
+      suffix: "MaShu. All rights reserved.",
     },
   },
   articleAnalyze: {
@@ -66,7 +66,7 @@ export const teekConfig = defineTeekConfig({
   ],
   banner: {
     enabled: true, // 是否启用 Banner
-    name: "ZeHan", // Banner 标题，默认读取 vitepress 的 title 属性
+    name: "MaShu", // Banner 标题，默认读取 vitepress 的 title 属性
     bgStyle: "fullImg", // Banner 背景风格：pure 为纯色背景，partImg 为局部图片背景，fullImg 为全屏图片背景
     pureBgColor: "#28282d", // Banner 背景色，bgStyle 为 pure 时生效
     imgSrc: ["/blog/bg1.webp", "/blog/bg2.webp", "/blog/bg3.webp"], // Banner 图片链接。bgStyle 为 partImg 或 fullImg 时生效
@@ -93,7 +93,7 @@ export const teekConfig = defineTeekConfig({
     featureCarousel: 4000, // feature 轮播间隔时间，单位：毫秒。仅在移动端生效（屏幕小于 719px）
   },
   blogger: {
-    name: "ZeHan", // 博主昵称
+    name: "MaShu", // 博主昵称
     slogan: "朝圣的使徒，正在走向编程的至高殿堂！", // 博主签名
     shape: "circle-rotate", // 头像风格：square 为方形头像，circle 为圆形头像，circle-rotate 可支持鼠标悬停旋转，circle-rotate-last 将会持续旋转 59s
     avatar: "/logo/avatar.jpeg", // 博主头像
