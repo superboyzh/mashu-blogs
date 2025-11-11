@@ -96,7 +96,7 @@ export default defineConfig({
       },
       {
         text: "文档",
-        link: "/word/test",
+        link: "/frontend/virtual-list",
         activeMatch: "/02.文档/",
       },
       {
