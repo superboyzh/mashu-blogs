@@ -1,5 +1,5 @@
 import Teek from "vitepress-theme-teek";
-import TeekLayoutProvider from "./components/TeekLayoutProvider.vue";
+// import TeekLayoutProvider from "./components/TeekLayoutProvider.vue";
 import MyNoticeContent from "./components/MyNoticeContent.vue";
 
 // Teek 在线主题包引用（需安装 Teek 在线版本）
@@ -21,6 +21,8 @@ import "./styles/code-bg.scss";
 import "./styles/iframe.scss";
 
 import { h } from "vue";
+import { nextTick, onMounted, watch } from "vue";
+import { useData } from "vitepress";
 
 export default {
   extends: Teek,
@@ -28,5 +30,36 @@ export default {
     return h(Teek.Layout, null, {
       "teek-notice-content": () => h(MyNoticeContent),
     });
+  },
+  enhanceApp() {},
+  setup() {
+    if (typeof window !== "undefined") {
+      const { page } = useData();
+      const renderMathJax = () => {
+        nextTick(() => {
+          setTimeout(() => {
+            if ((window as any).MathJax) {
+              (window as any).MathJax.typesetPromise().catch((err: any) =>
+                console.error("MathJax渲染错误:", err)
+              );
+            }
+          }, 100);
+        });
+      };
+
+      // 初始渲染
+      onMounted(() => {
+        renderMathJax();
+      });
+
+      // 监听页面变化
+      watch(
+        () => page.value.relativePath,
+        () => {
+          renderMathJax();
+        },
+        { flush: "post" }
+      );
+    }
   },
 };

@@ -40,6 +40,28 @@ export default defineConfig({
     //   },
     // ],
     ["meta", { name: "keywords", description }],
+    // MathJax 配置脚本
+    [
+      "script",
+      { type: "text/javascript" },
+      `
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$']],
+          displayMath: [['$$', '$$']],
+          processEscapes: true
+        }
+      };
+      `,
+    ],
+    // 加载 MathJax 库
+    [
+      "script",
+      {
+        id: "MathJax-script",
+        src: "https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js",
+      },
+    ],
   ],
   markdown: {
     // 开启行号
