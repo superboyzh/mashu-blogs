@@ -31,35 +31,127 @@ MathJax 是一个 JavaScript 库，用于在网页中显示数学符号和公式
 - **可访问性**：支持屏幕阅读器，符合无障碍标准
 - **易于集成**：可以轻松集成到各种 Web 框架中
 
-## 在 VitePress 中集成 MathJax
+## 前端项目集成 MathJax
 
-### 方法一：使用 VitePress 插件
+### 方法一：CDN 直接引入
+
+在 HTML 文件的 `<head>` 标签中添加：
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- MathJax 配置 -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  
+  <!-- 加载 MathJax 库 -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async 
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+</head>
+<body>
+  <!-- 你的内容 -->
+</body>
+</html>
+```
+
+### 方法二：npm 安装
+
+```bash
+npm install mathjax@3
+# 或
+yarn add mathjax@3
+```
+
+在 JavaScript 中使用：
 
 ```javascript
-// .vitepress/config.js
-export default {
-  // ...其他配置
-  markdown: {
-    theme: {
-      light: 'vitesse-light',
-      dark: 'vitesse-dark'
-    },
-    lineNumbers: true,
-    config: (md) => {
-      // 可以在这里添加 markdown-it 插件
+import { MathJax } from 'mathjax3/es5/startup.js';
+
+// 配置 MathJax
+MathJax.config.tex = {
+  inlineMath: [['$', '$'], ['\\(', '\\)']],
+  displayMath: [['$$', '$$'], ['\\[', '\\]']],
+  processEscapes: true
+};
+
+// 启动 MathJax
+MathJax.startup.getComponents();
+MathJax.startup.ready();
+```
+
+### 方法三：在 React 项目中使用
+
+创建一个 MathJax 组件：
+
+```jsx
+import React, { useEffect, useRef } from 'react';
+
+const MathJaxComponent = ({ formula, isBlock = false }) => {
+  const mathRef = useRef();
+
+  useEffect(() => {
+    // 确保 MathJax 已加载
+    if (window.MathJax) {
+      // 渲染公式
+      window.MathJax.typesetPromise([mathRef.current]).catch((err) => {
+        console.error('MathJax 渲染错误:', err);
+      });
     }
-  },
-  // 添加 MathJax 配置
-  head: [
-    ['script', {
-      src: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js',
-      async: true
-    }]
-  ]
+  }, [formula]);
+
+  return (
+    <div 
+      ref={mathRef} 
+      className={isBlock ? 'math-block' : 'math-inline'}
+    >
+      {isBlock ? `$$${formula}$$` : `$${formula}$`}
+    </div>
+  );
+};
+
+export default MathJaxComponent;
+```
+
+使用组件：
+
+```jsx
+function App() {
+  return (
+    <div>
+      <h1>数学公式示例</h1>
+      <p>
+        内联公式：
+        <MathJaxComponent formula="x^2 + y^2 = z^2" />
+      </p>
+      <p>
+        块级公式：
+        <MathJaxComponent 
+          formula="\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}" 
+          isBlock={true} 
+        />
+      </p>
+    </div>
+  );
 }
 ```
 
-### 方法二：使用组件方式
+### 方法四：在 Vue.js 项目中使用
 
 首先创建一个 MathJax 组件：
 
@@ -125,13 +217,95 @@ export default {
 </style>
 ```
 
-## 基础使用方法
+使用组件：
 
-::: tip 配置说明
-MathJax 已经配置到 VitePress 主题中，支持以下公式格式：
-- 内联公式：使用 `$...$` 或 `\(...\)` 包裹
-- 块级公式：使用 `$$...$$` 或 `\[...\]` 包裹
-:::
+```vue
+<template>
+  <div>
+    <h1>数学公式示例</h1>
+    <p>
+      内联公式：
+      <MathJax formula="x^2 + y^2 = z^2" />
+    </p>
+    <p>
+      块级公式：
+      <MathJax formula="\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}" :display-mode="true" />
+    </p>
+  </div>
+</template>
+
+<script>
+import MathJax from './components/MathJax.vue';
+
+export default {
+  components: {
+    MathJax
+  }
+};
+</script>
+```
+
+### 方法五：在其他框架中集成
+
+#### Angular 集成
+
+```typescript
+// math.component.ts
+import { Component, Input, ElementRef, AfterViewInit } from '@angular/core';
+
+@Component({
+  selector: 'app-math',
+  template: '<div [innerHTML]="mathContent"></div>'
+})
+export class MathComponent implements AfterViewInit {
+  @Input() formula: string = '';
+  @Input() isBlock: boolean = false;
+  
+  mathContent: string = '';
+  
+  constructor(private el: ElementRef) {}
+  
+  ngAfterViewInit() {
+    this.mathContent = this.isBlock ? `$$${this.formula}$$` : `$${this.formula}$`;
+    
+    if ((window as any).MathJax) {
+      (window as any).MathJax.typesetPromise([this.el.nativeElement]);
+    }
+  }
+}
+```
+
+#### Svelte 集成
+
+```svelte
+<!-- Math.svelte -->
+<script>
+  import { onMount } from 'svelte';
+  
+  export let formula = '';
+  export let isBlock = false;
+  
+  let mathElement;
+  
+  onMount(() => {
+    if (window.MathJax) {
+      window.MathJax.typesetPromise([mathElement]);
+    }
+  });
+</script>
+
+<div bind:this={mathElement}>
+  {#if isBlock}
+    $$${formula}$$
+  {:else}
+    ${formula}$
+  {/if}
+</div>
+```
+
+## 基础使用语法
+
+### LaTeX 数学符号语法
 
 ### 内联公式
 
@@ -180,7 +354,7 @@ $$
 
 ### 分数和根式
 
-```markdown
+```latex
 分数：$\frac{a}{b}$
 
 根式：$\sqrt{x}$，$\sqrt[3]{x}$
@@ -188,14 +362,15 @@ $$
 复杂分数：$\frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2} = 0$
 ```
 
-效果：
+**渲染效果：**
+
 - 分数：$\frac{a}{b}$
 - 根式：$\sqrt{x}$，$\sqrt[3]{x}$
 - 复杂分数：$\frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2} = 0$
 
 ### 求和与积分
 
-```markdown
+```latex
 求和：$\sum_{i=1}^{n} i = \frac{n(n+1)}{2}$
 
 积分：$\int_{a}^{b} f(x) dx$
@@ -203,7 +378,8 @@ $$
 极限：$\lim_{x \to \infty} \left(1 + \frac{1}{x}\right)^x = e$
 ```
 
-效果：
+**渲染效果：**
+
 - 求和：$\sum_{i=1}^{n} i = \frac{n(n+1)}{2}$
 - 积分：$\int_{a}^{b} f(x) dx$
 - 极限：$\lim_{x \to \infty} \left(1 + \frac{1}{x}\right)^x = e$
@@ -239,11 +415,11 @@ $$
 
 点积：$\vec{a} \cdot \vec{b} = |\vec{a}| |\vec{b}| \cos\theta$
 
-## 高级应用
+## 高级应用示例
 
-### 物理公式示例
+### 物理学公式
 
-```markdown
+```latex
 牛顿第二定律：
 $$
 \vec{F} = m\vec{a} = m\frac{d^2\vec{x}}{dt^2}
@@ -260,7 +436,8 @@ $$
 $$
 ```
 
-效果：
+**渲染效果：**
+
 牛顿第二定律：
 $$
 \vec{F} = m\vec{a} = m\frac{d^2\vec{x}}{dt^2}
@@ -278,7 +455,7 @@ $$
 
 ### 统计学公式
 
-```markdown
+```latex
 正态分布概率密度函数：
 $$
 f(x) = \frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}
@@ -290,7 +467,8 @@ P(A|B) = \frac{P(B|A)P(A)}{P(B)}
 $$
 ```
 
-效果：
+**渲染效果：**
+
 正态分布概率密度函数：
 $$
 f(x) = \frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}
@@ -301,254 +479,405 @@ $$
 P(A|B) = \frac{P(B|A)P(A)}{P(B)}
 $$
 
-## Vue 组件中的 MathJax
+## 动态公式渲染
 
-### 动态渲染公式
+### JavaScript 手动渲染
 
-```vue
-<template>
-  <div class="formula-demo">
-    <h2>数学公式演示</h2>
+当你需要动态添加公式内容时，可以手动触发 MathJax 渲染：
 
-    <div class="input-section">
-      <h3>输入 LaTeX 公式：</h3>
-      <input
-        v-model="formula"
-        @input="updateFormula"
-        placeholder="输入 LaTeX 公式，如：x^2 + y^2 = z^2"
-      />
-      <label>
-        <input
-          type="checkbox"
-          v-model="displayMode"
-          @change="updateFormula"
-        />
-        块级显示
-      </label>
-    </div>
+```javascript
+// 渲染指定元素中的公式
+function renderMath(element) {
+  if (window.MathJax) {
+    MathJax.typesetPromise([element]).catch((err) => {
+      console.error('MathJax 渲染失败:', err);
+    });
+  }
+}
 
-    <div class="result-section">
-      <h3>渲染结果：</h3>
-      <div ref="formulaDisplay" class="formula-display">
-        {{ formula }}
-      </div>
-    </div>
+// 渲染整个文档
+function renderAllMath() {
+  if (window.MathJax) {
+    MathJax.typesetPromise().catch((err) => {
+      console.error('MathJax 渲染失败:', err);
+    });
+  }
+}
 
-    <div class="examples">
-      <h3>常用示例：</h3>
-      <button
-        v-for="(example, index) in examples"
-        :key="index"
-        @click="setFormula(example.formula, example.display)"
-      >
-        {{ example.name }}
-      </button>
-    </div>
-  </div>
-</template>
+// 动态添加公式示例
+function addFormula(containerId, formula, isBlock = false) {
+  const container = document.getElementById(containerId);
+  const mathDiv = document.createElement('div');
+  
+  if (isBlock) {
+    mathDiv.innerHTML = `$$${formula}$$`;
+    mathDiv.className = 'math-block';
+  } else {
+    mathDiv.innerHTML = `$${formula}$`;
+    mathDiv.className = 'math-inline';
+  }
+  
+  container.appendChild(mathDiv);
+  
+  // 渲染新添加的公式
+  renderMath(mathDiv);
+}
 
-<script>
-export default {
-  name: 'FormulaDemo',
-  data() {
-    return {
-      formula: 'x^2 + y^2 = z^2',
-      displayMode: false,
-      examples: [
-        {
-          name: '勾股定理',
-          formula: 'a^2 + b^2 = c^2',
-          display: false
-        },
-        {
-          name: '欧拉公式',
-          formula: 'e^{i\\pi} + 1 = 0',
-          display: false
-        },
-        {
-          name: '二次方程求根',
-          formula: 'x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}',
-          display: true
-        },
-        {
-          name: '积分公式',
-          formula: '\\int_{0}^{\\infty} e^{-x^2} dx = \\frac{\\sqrt{\\pi}}{2}',
-          display: true
-        }
-      ]
-    };
+// 使用示例
+addFormula('formula-container', 'x^2 + y^2 = z^2', false);
+addFormula('formula-container', '\\int_{0}^{1} x^2 dx = \\frac{1}{3}', true);
+```
+
+### 配置选项详解
+
+```javascript
+window.MathJax = {
+  // TeX 输入处理器配置
+  tex: {
+    // 内联数学分隔符
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    
+    // 显示数学分隔符
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    
+    // 处理反斜杠转义
+    processEscapes: true,
+    
+    // 处理环境
+    processEnvironments: true,
+    
+    // 自动换行
+    processRefs: true,
+    
+    // 扩展包
+    packages: {
+      '[+]': ['ams', 'newcommand', 'configmacros']
+    }
   },
-  mounted() {
-    this.renderFormula();
+  
+  // 输出处理器配置
+  chtml: {
+    // 字体缩放
+    scale: 1,
+    
+    // 最小缩放
+    minScale: .5,
+    
+    // 匹配字体大小
+    matchFontHeight: false
   },
-  methods: {
-    setFormula(formula, display) {
-      this.formula = formula;
-      this.displayMode = display;
-      this.renderFormula();
-    },
-    updateFormula() {
-      this.$nextTick(() => {
-        this.renderFormula();
-      });
-    },
-    renderFormula() {
-      if (!window.MathJax) return;
-
-      // 根据显示模式包装公式
-      let wrappedFormula = this.formula;
-      if (this.displayMode) {
-        wrappedFormula = `$$${this.formula}$$`;
-      } else {
-        wrappedFormula = `$${this.formula}$`;
-      }
-
-      // 更新显示内容
-      this.$refs.formulaDisplay.innerHTML = wrappedFormula;
-
-      // 重新渲染 MathJax
-      window.MathJax.typesetPromise([this.$refs.formulaDisplay]);
+  
+  // 一般选项
+  options: {
+    // 跳过的 HTML 标签
+    skipHtmlTags: [
+      'script', 'noscript', 'style', 'textarea', 
+      'pre', 'code', 'annotation', 'annotation-xml'
+    ],
+    
+    // 忽略的 CSS 类
+    ignoreHtmlClass: 'tex2jax_ignore',
+    
+    // 处理的 CSS 类
+    processHtmlClass: 'tex2jax_process'
+  },
+  
+  // 启动配置
+  startup: {
+    // 页面加载后是否自动排版
+    typeset: true,
+    
+    // 就绪回调
+    ready() {
+      console.log('MathJax 已准备就绪');
+      MathJax.startup.defaultReady();
     }
   }
 };
-</script>
-
-<style scoped>
-.formula-demo {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.input-section, .result-section {
-  margin-bottom: 30px;
-}
-
-input[type="text"] {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-family: 'Courier New', monospace;
-}
-
-label {
-  margin-left: 20px;
-}
-
-.formula-display {
-  min-height: 50px;
-  padding: 15px;
-  background: #f5f5f5;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 18px;
-}
-
-.examples button {
-  margin: 5px;
-  padding: 8px 15px;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.examples button:hover {
-  background: #0056b3;
-}
-</style>
 ```
-
 ## 常见问题与解决方案
 
-### 1. 公式不显示
+### 1. MathJax 加载失败
 
-**问题**：MathJax 加载完成后，页面中的公式没有渲染。
+**问题症状：** 页面中的公式显示为原始的 LaTeX 代码。
 
-**解决方案**：
+**解决方案：**
+
 ```javascript
-// 手动触发渲染
-window.MathJax.typesetPromise();
-
-// 或者针对特定元素
-window.MathJax.typesetPromise([document.getElementById('formula-container')]);
-```
-
-### 2. 动态内容不渲染
-
-**问题**：Vue 动态更新的内容中的公式不会自动渲染。
-
-**解决方案**：
-```javascript
-// 在 Vue 的 updated 或 nextTick 中调用
-this.$nextTick(() => {
-  if (window.MathJax) {
-    window.MathJax.typesetPromise([this.$refs.dynamicContent]);
+// 检查 MathJax 是否已加载
+function checkMathJax() {
+  if (typeof window.MathJax === 'undefined') {
+    console.error('MathJax 未加载，请检查网络连接或 CDN 地址');
+    return false;
   }
-});
+  console.log('MathJax 版本:', window.MathJax.version);
+  return true;
+}
+
+// 等待 MathJax 加载完成
+function waitForMathJax(callback, maxAttempts = 50) {
+  let attempts = 0;
+  
+  const checkInterval = setInterval(() => {
+    if (window.MathJax && window.MathJax.typesetPromise) {
+      clearInterval(checkInterval);
+      callback();
+    } else if (++attempts >= maxAttempts) {
+      clearInterval(checkInterval);
+      console.error('MathJax 加载超时');
+    }
+  }, 100);
+}
 ```
 
-### 3. 性能优化
+### 2. 动态内容渲染问题
 
-**问题**：大量公式渲染导致页面卡顿。
+**问题症状：** 动态添加的内容中的公式不会自动渲染。
 
-**解决方案**：
+**解决方案：**
+
 ```javascript
-// 配置 MathJax 性能选项
+// 处理动态内容的通用函数
+function handleDynamicContent() {
+  // 使用 MutationObserver 监听 DOM 变化
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.addedNodes.length > 0) {
+        // 检查新添加的节点是否包含数学公式
+        mutation.addedNodes.forEach((node) => {
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            const hasFormula = node.textContent.includes('$') || 
+                              node.textContent.includes('\\(') ||
+                              node.textContent.includes('\\[');
+            
+            if (hasFormula && window.MathJax) {
+              // 延迟渲染，确保 DOM 更新完成
+              setTimeout(() => {
+                window.MathJax.typesetPromise([node]);
+              }, 10);
+            }
+          }
+        });
+      }
+    });
+  });
+
+  // 开始观察
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+  
+  return observer;
+}
+
+// 启用动态内容监听
+const mathObserver = handleDynamicContent();
+```
+
+### 3. 性能优化策略
+
+**问题症状：** 大量公式导致页面渲染缓慢。
+
+**解决方案：**
+
+```javascript
+// 批量渲染优化
+class MathRenderer {
+  constructor() {
+    this.queue = [];
+    this.isProcessing = false;
+  }
+  
+  // 添加渲染任务到队列
+  addToQueue(elements) {
+    if (Array.isArray(elements)) {
+      this.queue.push(...elements);
+    } else {
+      this.queue.push(elements);
+    }
+    
+    if (!this.isProcessing) {
+      this.processQueue();
+    }
+  }
+  
+  // 处理渲染队列
+  async processQueue() {
+    if (this.queue.length === 0 || this.isProcessing) {
+      return;
+    }
+    
+    this.isProcessing = true;
+    
+    try {
+      // 分批处理，避免阻塞 UI
+      while (this.queue.length > 0) {
+        const batch = this.queue.splice(0, 5); // 每批处理 5 个元素
+        
+        if (window.MathJax) {
+          await window.MathJax.typesetPromise(batch);
+        }
+        
+        // 让出执行权，避免阻塞 UI
+        await new Promise(resolve => setTimeout(resolve, 10));
+      }
+    } catch (error) {
+      console.error('批量渲染失败:', error);
+    }
+    
+    this.isProcessing = false;
+  }
+}
+
+// 使用示例
+const mathRenderer = new MathRenderer();
+
+// 添加多个元素进行渲染
+const formulaElements = document.querySelectorAll('.math-formula');
+mathRenderer.addToQueue(Array.from(formulaElements));
+```
+
+### 4. 移动端适配
+
+**问题症状：** 公式在移动设备上显示异常。
+
+**解决方案：**
+
+```javascript
+// 移动端优化配置
 window.MathJax = {
   tex: {
-    inlineMath: [['$', '$'], ['\\(', '\\)']],
-    displayMath: [['$$', '$$'], ['\\[', '\\]']],
-    processEscapes: true
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']]
+  },
+  chtml: {
+    // 适应移动设备屏幕
+    scale: 0.9,
+    minScale: 0.5,
+    // 字体匹配
+    matchFontHeight: false
   },
   options: {
-    processHtmlClass: 'tex2jax_process',
-    ignoreHtmlClass: 'tex2jax_ignore'
-  },
-  startup: {
-    typeset: false // 延迟渲染
+    // 启用响应式处理
+    processHtmlClass: 'tex2jax_process'
   }
 };
+
+// CSS 样式优化
+const mobileStyles = `
+  .MathJax {
+    font-size: 16px !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+  }
+  
+  @media (max-width: 768px) {
+    .MathJax {
+      font-size: 14px !important;
+    }
+    
+    .MathJax_Display {
+      text-align: left !important;
+      margin: 1em 0 !important;
+    }
+  }
+`;
+
+// 动态添加样式
+const styleSheet = document.createElement('style');
+styleSheet.textContent = mobileStyles;
+document.head.appendChild(styleSheet);
 ```
 
-## 最佳实践
+## 最佳实践建议
 
-### 1. 性能优化建议
+### 1. 性能优化
 
-- **延迟加载**：只在需要时加载 MathJax
+- **延迟加载**：只在需要显示公式的页面才加载 MathJax
 - **批量渲染**：避免频繁的单个公式渲染
-- **缓存机制**：对重复使用的公式进行缓存
-
-### 2. 内容编写建议
-
-- **语义化**：使用有意义的变量名和注释
-- **格式化**：保持 LaTeX 代码的可读性
-- **测试验证**：确保公式在不同浏览器中都能正确显示
-
-### 3. 可访问性考虑
+- **缓存策略**：对重复使用的公式进行缓存
 
 ```javascript
-// 配置 MathJax 支持屏幕阅读器
+// 延迟加载示例
+function loadMathJaxOnDemand() {
+  if (document.querySelector('.math-formula') && !window.MathJax) {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+    script.async = true;
+    document.head.appendChild(script);
+  }
+}
+
+// 页面加载完成后检查
+document.addEventListener('DOMContentLoaded', loadMathJaxOnDemand);
+```
+
+### 2. 错误处理
+
+- **优雅降级**：当 MathJax 加载失败时提供备选方案
+- **错误监控**：记录和处理渲染错误
+- **用户反馈**：在公式渲染失败时给出明确提示
+
+```javascript
+// 错误处理示例
+function renderWithFallback(element, formula) {
+  if (window.MathJax) {
+    window.MathJax.typesetPromise([element]).catch((error) => {
+      console.error('公式渲染失败:', error);
+      // 显示错误提示
+      element.innerHTML = `
+        <span style="color: red; font-style: italic;">
+          [公式渲染失败: ${formula}]
+        </span>
+      `;
+    });
+  } else {
+    // MathJax 未加载的备选方案
+    element.innerHTML = `
+      <code style="background: #f5f5f5; padding: 2px 4px;">
+        ${formula}
+      </code>
+    `;
+  }
+}
+```
+
+### 3. 可访问性支持
+
+```javascript
+// 配置无障碍访问
 window.MathJax = {
   a11y: {
-    assistiveMml: true,
-    braille: true
+    assistiveMml: true,  // 启用辅助 MathML
+    braille: true,       // 支持盲文显示
+    speech: true,        // 支持语音朗读
+    locale: 'zh'         // 设置语言
   }
 };
 ```
 
 ## 总结
 
-MathJax 是一个强大且灵活的数学公式渲染引擎，特别适合：
+MathJax 是一个功能强大的数学公式渲染引擎，适用于各种前端项目：
 
-1. **技术文档**：教程、API 文档中的数学说明
-2. **学术博客**：科研论文、技术分享
-3. **教育网站**：在线课程、练习平台
-4. **科学计算**：数据可视化、结果展示
+### 主要优势
 
-通过合理使用 MathJax，可以让数学内容在网页中得到优美且准确的展示，提升用户的阅读体验和理解效果。
+1. **广泛兼容**：支持所有现代浏览器和移动设备
+2. **高质量渲染**：生成美观、清晰的数学公式
+3. **易于集成**：可以轻松集成到 React、Vue、Angular 等框架
+4. **丰富功能**：支持 LaTeX、MathML、AsciiMath 多种输入格式
+5. **可访问性**：支持屏幕阅读器和无障碍访问
+
+### 适用场景
+
+- **技术文档**：API 文档、技术教程中的数学说明
+- **教育平台**：在线课程、练习系统、考试平台
+- **科研网站**：学术论文、研究报告展示
+- **博客网站**：技术博客中的公式展示
+- **数据分析**：可视化报告中的数学模型
+
+通过合理配置和优化，MathJax 可以为您的项目提供专业级的数学公式显示效果。
 
 ## 故障排除指南
 
