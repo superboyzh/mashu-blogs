@@ -142,7 +142,7 @@ export const teekConfig = defineTeekConfig({
   },
   blogger: {
     name: "MaShu", // 博主昵称
-    slogan: "朝圣的使徒，正在走向编程的至高殿堂！", // 博主签名
+    slogan: "世上无难事，只要肯放弃！", // 博主签名
     shape: "circle-rotate-last", // 头像风格：square 为方形头像，circle 为圆形头像，circle-rotate 可支持鼠标悬停旋转，circle-rotate-last 将会持续旋转 59s
     avatar: "/logo/avatar.jpeg", // 博主头像
     circleBgImg: "/blog/bg4.webp", // 背景图片
@@ -170,6 +170,19 @@ export const teekConfig = defineTeekConfig({
   },
 
   vitePlugins: {
+    sidebar: true, // 是否启用 sidebar 插件
+    permalink: true, // 是否启用 permalink 插件
+    permalinkOption: {}, // permalinks 插件配置项
+    mdH1: true, // 是否启用 mdH1 插件
+    catalogueOption: {}, // catalogues 插件配置项
+    docAnalysis: true, // 是否启用 docAnalysis 插件
+    docAnalysisOption: {}, // docAnalysis 插件配置项
+    fileContentLoaderIgnore: [], // fileContentLoader 插件扫描 markdown 文档时，指定忽略路径，格式为 glob 表达式，如 **/test/**
+    autoFrontmatter: true, // 是否启用 autoFrontmatter 插件
+    autoFrontmatterOption: {
+      categories: true,
+      permalink: false,
+    },
     sidebarOption: {
       initItems: false,
     },

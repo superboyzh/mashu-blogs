@@ -95,11 +95,15 @@ export default defineConfig({
         activeMatch: "/01.指南/",
       },
       {
+        text: "文档",
+        link: "/word/test",
+        activeMatch: "/02.文档/",
+      },
+      {
         text: "功能页",
         items: [
           { text: "归档页", link: "/archives" },
           { text: "清单页", link: "/articleOverview" },
-          { text: "登录页", link: "/login" },
           { text: "分类页", link: "/categories" },
           { text: "标签页", link: "/tags" },
         ],
@@ -122,7 +126,7 @@ export default defineConfig({
     editLink: {
       text: "在 GitHub 上编辑此页",
       pattern:
-        "https://github.com/Kele-Bingtang/vitepress-theme-teek/edit/master/docs/:path",
+        "https://github.com/superboyzh/superboyzhBlog/edit/main/docs/:path",
     },
   },
   vite: {
