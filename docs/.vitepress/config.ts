@@ -140,9 +140,9 @@ export default defineConfig({
     search: {
       provider: "algolia",
       options: {
-        appId: "TFB201QIWF",
-        apiKey: "bc8a56666aff80c311f76dae86f2bd25",
-        indexName: "maShudocSearch",
+        appId: "AOSJZ9XMJU",
+        apiKey: "5af8f7b7b6c0455166aff7c639b0d82b",
+        indexName: "mashu",
       },
     },
     editLink: {
