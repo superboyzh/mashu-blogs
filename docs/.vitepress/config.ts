@@ -80,7 +80,7 @@ export default defineConfig({
     },
   },
   sitemap: {
-    hostname: "https://www.idoit.icu", // ** 换成你的域名
+    hostname: "https://idoit.icu", // ** 换成你的域名
     transformItems: (items) => {
       const permalinkItemBak: typeof items = [];
       // 使用永久链接生成 sitemap
