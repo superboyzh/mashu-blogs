@@ -142,7 +142,7 @@ export default defineConfig({
       options: {
         appId: "SEOXQO3802",
         apiKey: "31ffa1fd0990691c5b7b35a4f7ecf0e1",
-        indexName: "MaShu-Blog",
+        indexName: "mashu_blog_pages",
       },
     },
     editLink: {
