@@ -251,10 +251,10 @@ export const teekConfig = defineTeekConfig({
       // cssLink: "https://unpkg.com/@waline/client@v3/dist/waline.css",
 
       // giscus 配置，官网：https://giscus.app/zh-CN
-      repo: "your name/your repo",
-      repoId: "your repoId",
-      category: "your category",
-      categoryId: "your categoryId",
+      repo: "superboyzh/superboyzhBlog",
+      repoId: "R_kgDOQPk90g",
+      category: "Announcements",
+      categoryId: "DIC_kwDOQPk90s4Cx7HI",
 
       // artalk 配置，官网：https://artalk.js.org/
       // server: "your server",
