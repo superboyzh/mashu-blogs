@@ -64,13 +64,13 @@ export const teekConfig = defineTeekConfig({
   },
   // 公告配置
   notice: {
-    enabled: true, // 是否启用公告功能
+    enabled: false, // 是否启用公告功能
     title: "公告", // 公告标题，支持函数式：需要和国际化搭配使用，根据不同语言环境返回不同标题
     initOpen: true,
-    duration: 0, // 弹框定时自动关闭，0 不自动消失
+    duration: 5000, // 弹框定时自动关闭，0 不自动消失
     mobileMinify: false, // 移动端自动最小化
     reopen: true,
-    useStorage: true, // 是是否使用 localStorage 存储公告状态，如：当打开公告弹框后，下次进来则自动打开弹框
+    useStorage: false, // 是是否使用 localStorage 存储公告状态，如：当打开公告弹框后，下次进来则自动打开弹框
     twinkle: false, // 公告图标是否打开闪烁提示
     position: "top", // 公告弹框出现位置
     // ...
@@ -100,6 +100,34 @@ export const teekConfig = defineTeekConfig({
     },
     { provider: "google", options: { id: "G-C480B0LRMT" } },
   ],
+  // 站点信息卡片配置
+  docAnalysis: {
+    enabled: true, // 是否启用站点信息卡片
+    createTime: "2025-11-13", // 站点创建时间
+    wordCount: true, // 是否开启文章页的字数统计
+    readingTime: true, // 是否开启文章页的阅读时长统计
+    // 访问量、访客数统计配置
+    statistics: {
+      provider: "busuanzi", // 网站流量统计提供商
+      siteView: true, // 是否开启首页的访问量和排名统计
+      pageView: true, // 是否开启文章页的浏览量统计
+      tryRequest: false, // 如果请求网站流量统计接口失败，是否重试
+      tryCount: 5, // 重试次数，仅当 tryRequest 为 true 时有效
+      tryIterationTime: 2000, // 重试间隔时间，单位：毫秒，仅当 tryRequest 为 true 时有效
+      permalink: true, // 是否只统计永久链接的浏览量，如果为 false，则统计 VitePress 默认的文档目录链接
+    },
+    // 自定义现有信息
+    overrideInfo: [
+      {
+        key: "lastActiveTime",
+        label: "活跃时间",
+        value: (_, currentValue) => (currentValue + "").replace("前", ""),
+        show: true,
+      },
+    ],
+    // 自定义额外信息
+    appendInfo: [{ key: "index", label: "站点作者", value: "MaShu" }],
+  },
   social: [
     {
       icon: "mdi:github",
@@ -168,7 +196,71 @@ export const teekConfig = defineTeekConfig({
     query: false, // 是否包含查询参数
     hash: false, // 是否包含哈希值
   },
+  articleTopTip: (frontmatter, localeIndex, page) => {
+    const tip: Record<string, string> = {
+      type: "warning",
+      text: "文章发布较早，内容可能过时，阅读注意甄别。",
+    };
 
+    // 大于半年，添加提示
+    const longTime = 6 * 30 * 24 * 60 * 60 * 1000;
+    if (
+      frontmatter.date &&
+      Date.now() - new Date(frontmatter.date).getTime() > longTime
+    )
+      return tip;
+  },
+  // 在每个文章页顶部显示 VitePress 容器添加提示，使用场景如添加文章版权声明。
+  articleBottomTip: (frontmatter) => {
+    if (typeof window === "undefined") return;
+
+    const hash = false;
+    const query = false;
+    const { origin, pathname, search } = window.location;
+    const url = `${origin}${frontmatter.permalink ?? pathname}${
+      query ? search : ""
+    }${hash ? location.hash : ""}`;
+    const author = "MaShu";
+
+    return {
+      type: "tip",
+      // title: "声明", // 可选
+      text: `<p>作者：${author}</p>
+             <p style="margin-bottom: 0">链接：<a href="${decodeURIComponent(
+               url
+             )}" target="_blank">${decodeURIComponent(url)}</a></p>
+             <p>版权：此文章版权归 ${author} 所有，如有转载，请注明出处!</p>
+            `,
+    };
+  },
+
+  articleUpdate: {
+    enabled: false, // 是否启用文章最近更新栏
+    limit: 3, // 文章最近更新栏显示数量
+  },
+  comment: {
+    provider: "giscus", // 评论区提供者
+    // 评论区配置项，根据 provider 不同而不同，具体看对应官网的使用介绍
+    options: {
+      // twikoo 配置，官网：https://twikoo.js.org/
+      // envId: "your envId",
+
+      // waline 配置，官网：https://waline.js.org/
+      // serverURL: "your serverURL",
+      // jsLink: "https://unpkg.com/@waline/client@v3/dist/waline.js",
+      // cssLink: "https://unpkg.com/@waline/client@v3/dist/waline.css",
+
+      // giscus 配置，官网：https://giscus.app/zh-CN
+      repo: "your name/your repo",
+      repoId: "your repoId",
+      category: "your category",
+      categoryId: "your categoryId",
+
+      // artalk 配置，官网：https://artalk.js.org/
+      // server: "your server",
+      // site: "site",
+    },
+  },
   vitePlugins: {
     sidebar: true, // 是否启用 sidebar 插件
     permalink: true, // 是否启用 permalink 插件
