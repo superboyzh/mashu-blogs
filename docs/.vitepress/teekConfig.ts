@@ -27,10 +27,10 @@ export const teekConfig = defineTeekConfig({
       suffix: "MaShu. All rights reserved.",
     },
     // ICP 备案信息配置
-    icpRecord: {
-      name: "赣ICP备2025076242号",
-      link: "http://beian.miit.gov.cn/",
-    },
+    // icpRecord: {
+    //   name: "赣ICP备2025076242号",
+    //   link: "http://beian.miit.gov.cn/",
+    // },
   },
   themeEnhance: {
     enabled: true, // 启用主题增强功能
