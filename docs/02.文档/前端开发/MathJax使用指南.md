@@ -1,9 +1,10 @@
 ---
 title: MathJax使用指南
+sidebarSort: 3
 date: 2025-11-11 10:30:00
 permalink: /frontend/mathjax-guide
 categories:
-  - 文档
+  - 前端开发
 tags:
   - 前端
   - MathJax

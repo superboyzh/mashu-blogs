@@ -33,7 +33,7 @@ export const teekConfig = defineTeekConfig({
     // },
   },
   themeEnhance: {
-    enabled: true, // 启用主题增强功能
+    enabled: false, // 隐藏主题增强面板和右下角主题色切换入口
     position: "top", // 位置，top 为导航栏右侧，bottom 为右下角
     // 布局切换配置
     layoutSwitch: {

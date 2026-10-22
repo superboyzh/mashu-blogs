@@ -2,11 +2,7 @@ import { defineConfig } from "vitepress";
 import llmstxt from "vitepress-plugin-llms";
 import { teekConfig } from "./teekConfig";
 
-const description = [
-  "欢迎来到 vitepress-theme-teek 使用文档",
-  "Teek 是一个基于 VitePress 构建的主题，是在默认主题的基础上进行拓展，支持 VitePress 的所有功能、配置",
-  "Teek 拥有三种典型的知识管理形态：结构化、碎片化、体系化，可以轻松构建一个结构化知识库，适用个人博客、文档站、知识库等场景",
-].toString();
+const description = "MaShu 的技术博客，记录前端开发、Java、Python、数据库与服务器部署的学习笔记和实践。";
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -26,10 +22,7 @@ export default defineConfig({
     ["meta", { property: "og:locale", content: "zh-CN" }],
     ["meta", { property: "og:title", content: "MaShu 的博客 | MaShu Blog" }],
     ["meta", { property: "og:site_name", content: "MaShu 的博客" }],
-    ["meta", { property: "og:image", content: "" }],
-    ["meta", { property: "og:url", content: "" }],
-    ["meta", { property: "og:description", description }],
-    ["meta", { name: "description", description }],
+    ["meta", { property: "og:description", content: description }],
     ["meta", { name: "author", content: "MaShu" }],
     // 禁止浏览器缩放
     // [
@@ -39,7 +32,7 @@ export default defineConfig({
     //     content: "width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no",
     //   },
     // ],
-    ["meta", { name: "keywords", description }],
+    ["meta", { name: "keywords", content: "MaShu,技术博客,前端,Java,Python,Redis,Nginx,Docker" }],
     // MathJax 配置脚本
     [
       "script",
@@ -82,16 +75,14 @@ export default defineConfig({
   sitemap: {
     hostname: "https://www.idoit.icu", // ** 换成你的域名
     transformItems: (items) => {
-      const permalinkItemBak: typeof items = [];
-      // 使用永久链接生成 sitemap
+      // 插件映射的键为不含扩展名的源路径，sitemap 则使用 .html 路径。
       const permalinks = (globalThis as any).VITEPRESS_CONFIG.site.themeConfig
         .permalinks;
-      items.forEach((item) => {
-        const permalink = permalinks?.map[item.url];
-        if (permalink)
-          permalinkItemBak.push({ url: permalink, lastmod: item.lastmod });
+      return items.map((item) => {
+        const sourcePath = decodeURI(item.url).replace(/^\//, "").replace(/\.html$/, "");
+        const permalink = permalinks?.map[sourcePath];
+        return permalink ? { ...item, url: permalink.replace(/^\//, "") } : item;
       });
-      return [...items, ...permalinkItemBak];
     },
   },
   themeConfig: {
@@ -148,11 +139,12 @@ export default defineConfig({
     editLink: {
       text: "在 GitHub 上编辑此页",
       pattern:
-        "https://github.com/superboyzh/superboyzhBlog/edit/main/docs/:path",
+        "https://github.com/superboyzh/mashu-blogs/edit/main/docs/:path",
     },
   },
   vite: {
-    plugins: [llmstxt() as any],
+    // 该插件的开发中间件会重复调用 next，保留构建产物生成即可。
+    plugins: llmstxt().map((plugin) => ({ ...plugin, apply: "build" as const })),
   },
   // transformHtml: (code, id, context) => {
   //   if (context.page !== "404.md") return code;

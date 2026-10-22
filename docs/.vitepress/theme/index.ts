@@ -38,8 +38,9 @@ export default {
       const renderMathJax = () => {
         nextTick(() => {
           setTimeout(() => {
-            if ((window as any).MathJax) {
-              (window as any).MathJax.typesetPromise().catch((err: any) =>
+            const mathJax = (window as any).MathJax;
+            if (typeof mathJax?.typesetPromise === "function") {
+              mathJax.typesetPromise().catch((err: any) =>
                 console.error("MathJax渲染错误:", err)
               );
             }

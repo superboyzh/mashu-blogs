@@ -1,3 +1,11 @@
+---
+date: 2026-10-22 10:01:07
+title: Conda管理工具
+sidebarSort: 1
+categories:
+  - Python
+permalink: /02.文档/conda管理工具
+---
 # macOS 使用 Conda 管理 Python：环境整理与日常使用手册
 
 > 适用设备：Apple Silicon Mac（当前设备为 Apple M4）  

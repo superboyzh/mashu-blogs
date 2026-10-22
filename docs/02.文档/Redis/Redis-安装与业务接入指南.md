@@ -1,5 +1,6 @@
 ---
 title: Ubuntu 24.04 安装、配置 Redis 并接入业务
+sidebarSort: 1
 date: 2026-08-24
 tags:
   - Ubuntu
@@ -7,7 +8,8 @@ tags:
   - Linux
   - Spring Boot
 categories:
-  - 服务端
+  - Redis
+permalink: /02.文档/Redis-安装与业务接入指南
 ---
 
 # Ubuntu 24.04 安装、配置 Redis 并接入业务

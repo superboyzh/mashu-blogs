@@ -1,3 +1,11 @@
+---
+date: 2026-10-22 10:01:07
+title: Jenv java多版本管理
+sidebarSort: 1
+categories:
+  - Java
+permalink: /02.文档/Jenv java多版本管理
+---
 # 在 macOS 上使用 jenv 管理和切换多个 Java 版本
 
 在开发过程中，不同项目经常依赖不同的 Java 版本。例如，老项目可能仍然需要 Java 8，新项目则通常使用 Java 21。如果长期通过手动修改 `JAVA_HOME` 和 `PATH` 来切换，不仅操作麻烦，也很容易出现路径残留和版本冲突。
