@@ -103,29 +103,17 @@ export default defineConfig({
     nav: [
       { text: "首页", link: "/" },
       {
-        text: "指南",
-        link: "/guide/intro",
-        activeMatch: "/01.指南/",
-      },
-      {
         text: "文档",
         link: "/frontend/virtual-list",
         activeMatch: "/02.文档/",
       },
-      {
-        text: "功能页",
-        items: [
-          { text: "归档页", link: "/archives" },
-          { text: "清单页", link: "/articleOverview" },
-          { text: "分类页", link: "/categories" },
-          { text: "标签页", link: "/tags" },
-        ],
-      },
+      { text: "分类", link: "/categories" },
+      { text: "关于", link: "/about" },
     ],
     socialLinks: [
       {
         icon: "github",
-        link: "https://github.com/superboyzh",
+        link: "https://github.com/superhao1126",
       },
     ],
     search: {
@@ -139,7 +127,7 @@ export default defineConfig({
     editLink: {
       text: "在 GitHub 上编辑此页",
       pattern:
-        "https://github.com/superboyzh/mashu-blogs/edit/main/docs/:path",
+        "https://github.com/superhao1126/mashu-blogs/edit/main/docs/:path",
     },
   },
   vite: {

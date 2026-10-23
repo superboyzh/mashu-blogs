@@ -1,0 +1,62 @@
+// 使用主题色变量，同时兼容浅色与深色模式。
+.tk-home {
+  --tk-home-banner-part-min-height: 144px;
+  --tk-card-shadow: none;
+  --tk-hover-shadow: none;
+  background: var(--vp-c-bg-alt);
+  padding-bottom: 32px;
+
+  .tk-banner__content.no-feature {
+    padding-bottom: 0;
+  }
+
+  .tk-banner-content {
+    width: calc(100% - 40px);
+    max-width: var(--tk-home-max-width);
+    margin: 0 auto;
+    padding: 28px 0 20px;
+    text-align: left;
+  }
+
+  .tk-banner-content__title {
+    padding-left: 14px;
+    border-left: 4px solid var(--vp-c-brand-1);
+  }
+
+  .tk-banner-content__desc {
+    color: var(--vp-c-text-2);
+    margin: 10px 0 0 18px;
+    line-height: 1.7;
+  }
+
+  .tk-home__content {
+    margin-top: 8px;
+  }
+
+  .tk-post-item {
+    --tk-home-post-line-clamp: 3;
+    border: 1px solid var(--vp-c-divider);
+    background: var(--vp-c-bg);
+    transition: border-color 0.2s;
+
+    &:hover {
+      transform: none;
+      border-color: var(--vp-c-text-3);
+    }
+  }
+
+  .tk-post-item .excerpt {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }
+
+  @media (max-width: 640px) {
+    --tk-home-banner-part-min-height: 128px;
+
+    .tk-banner-content {
+      padding: 24px 0 16px;
+    }
+  }
+}

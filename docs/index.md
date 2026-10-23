@@ -7,8 +7,8 @@ hero:
   tagline: ✨期待发展成一个神奇的技术文档
   actions:
     - theme: brand
-      text: 开始
-      link: /guide/intro
+      text: 关于本站
+      link: /about
     - theme: alt
       text: 文档分类
       link: /categories
